@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Enhanced Chat Tester</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f6f9;
+        }
+        h1, h2 {
+            color: #1b5e20;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #0070d2;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #005fb2;
+        }
+        .status-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-left: 5px solid #2e7d32;
+            border-radius: 4px;
+            display: none;
+        }
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Salesforce Enhanced Chat Deployment Tester</h1>
+    <p>Fill in your Salesforce Embedded Service configuration details below. This page will dynamically generate the deployment snippet and initialize the chat widget on this page for active end-to-end testing.</p>
+    
+    <hr>
+
+    <form id="configForm">
+        <div class="form-group">
+            <label for="orgId">Salesforce Org ID (15 or 18 characters):</label>
+            <input type="text" id="orgId" placeholder="e.g., 00Dxxxxxxxxxxxx" required>
+        </div>
+
+        <div class="form-group">
+            <label for="esdName">Embedded Service Deployment Name (API Name):</label>
+            <input type="text" id="esdName" placeholder="e.g., Enhanced_Chat_Deployment" required>
+        </div>
+
+        <div class="form-group">
+            <label for="scUrl">Salesforce Site/Experience URL:</label>
+            <input type="text" id="scUrl" placeholder="e.g., https://myorg.my.site.com/ESWEnhancedChat12345" required>
+        </div>
+
+        <div class="form-group">
+            <label for="scApiUrl">Salesforce Base API URL (Scrt2 URL):</label>
+            <input type="text" id="scApiUrl" placeholder="e.g., https://myorg.my.salesforce-scrt.com" required>
+        </div>
+
+        <button type="button" onclick="initializeEnhancedChat()">Generate & Initialize Chat</button>
+    </form>
+
+    <div id="statusBox" class="status-box">
+        <h3>Deployment Initialized!</h3>
+        <p>The Salesforce snippet has been injected. Look for the chat/messaging floating action button in the bottom right corner of this window to kick off your Omni-Channel routing test.</p>
+        <p><strong>Generated Snippet Reference:</strong></p>
+        <pre><code id="snippetPreview">Code will appear here...</code></pre>
+    </div>
+</div>
+
+<script type='text/javascript'>
+    function initializeEnhancedChat() {
+        // Grab values from the form fields
+        const orgId = document.getElementById('orgId').value.trim();
+        const esdName = document.getElementById('esdName').value.trim();
+        const scUrl = document.getElementById('scUrl').value.trim();
+        const scApiUrl = document.getElementById('scApiUrl').value.trim();
+
+        if(!orgId || !esdName || !scUrl || !scApiUrl) {
+            alert('Please fill out all fields before initializing.');
+            return;
+        }
+
+        // Display snippet preview text back to user
+        const dynamicSnippet = 
+`function initEmbeddedMessaging() {
+    try {
+        embeddedomnichannelmessaging.init(
+            '${orgId}',
+            '${esdName}',
+            '${scUrl}',
+            {
+                scrt2URL: '${scApiUrl}'
+            }
+        );
+    } catch (err) {
+        console.error('Error loading Embedded Messaging: ', err);
+    }
+};`;
+        
+        document.getElementById('snippetPreview').textContent = dynamicSnippet;
+        document.getElementById('statusBox').style.display = 'block';
+
+        // standard Salesforce bootstrap sequence for Enhanced Messaging (In-App & Web)
+        window._sfdc = window._sfdc || {};
+        window._sfdc.embeddedMessagingConfiguration = {
+            orgId: orgId,
+            deploymentName: esdName,
+            siteUrl: scUrl,
+            scrt2Url: scApiUrl
+        };
+
+        // Create and append the Salesforce platform messaging script dynamically
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        // Note: Enhanced Messaging uses the generic 'embeddedmessaging' asset script mapping
+        script.src = `${scUrl}/assets/js/bootstrap.min.js`;
+        
+        script.onload = function() {
+            console.log('Salesforce Bootstrap loaded successfully.');
+            if (typeof initEmbeddedMessaging === 'function') {
+                initEmbeddedMessaging();
+            } else {
+                // Inline fall-back implementation if the loaded script relies on custom window hook execution
+                try {
+                    embeddedomnichannelmessaging.init(orgId, esdName, scUrl, { scrt2URL: scApiUrl });
+                } catch (e) {
+                    console.error("Direct init catch:", e);
+                }
+            }
+        };
+
+        script.onerror = function() {
+            alert('Failed to load Salesforce bootstrap assets. Check your Site URL format or CORS/Whitelisting settings in Salesforce.');
+        };
+
+        document.body.appendChild(script);
+    }
+</script>
+
+</body>
+</html>
