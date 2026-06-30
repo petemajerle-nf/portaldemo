@@ -87,18 +87,13 @@
             overflow-x: auto;
             font-size: 13px;
         }
-        .hint {
-            font-size: 11px;
-            color: #666;
-            margin-top: 2px;
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Salesforce Enhanced Chat Deployment Tester</h1>
-    <p>Fill in your deployment details and hidden pre-chat variables. These will be injected into your messaging channel context, allowing Omni-Channel flows to route or map them into Case/Contact fields.</p>
+    <p>Fill in your deployment details and hidden pre-chat variables. The script now consistently uses your requested parameter names throughout the generation and execution phases.</p>
     
     <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
 
@@ -129,38 +124,36 @@
 
             <div class="section-box">
                 <h3>2. Hidden Pre-Chat Variables</h3>
-                <p style="font-size: 12px; color: #555; margin-top:-10px;">Values entered below are passed invisibly on chat load.</p>
+                <p style="font-size: 12px; color: #555; margin-top:-10px;">Values map directly to your Salesforce Messaging Parameters.</p>
                 
                 <div class="form-group">
-                    <label for="firstName">First Name:</label>
-                    <input type="text" id="First_Name" placeholder="John">
+                    <label for="firstName">First_Name:</label>
+                    <input type="text" id="firstName" placeholder="John">
                 </div>
 
                 <div class="form-group">
-                    <label for="lastName">Last Name:</label>
-                    <input type="text" id="Last_Name" placeholder="Doe">
+                    <label for="lastName">Last_Name:</label>
+                    <input type="text" id="lastName" placeholder="Doe">
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="Email_Address" placeholder="john.doe@example.com">
+                    <label for="email">Email_Address:</label>
+                    <input type="email" id="email" placeholder="john.doe@example.com">
                 </div>
 
                 <div class="form-group">
-                    <label for="companyName">Business Name:</label>
-                    <input type="text" id="Business_Name" placeholder="Acme Corp">
+                    <label for="businessName">Business_Name:</label>
+                    <input type="text" id="businessName" placeholder="Acme Corp">
                 </div>
 
                 <div class="form-group">
-                    <label for="taxId">Tax ID:</label>
-                    <input type="text" id="Tax_ID" placeholder="12-3456789">
-                    <div class="hint">Ensure this API Name matches your Messaging Parameter map.</div>
+                    <label for="taxId">Tax_ID:</label>
+                    <input type="text" id="taxId" placeholder="12-3456789">
                 </div>
 
                 <div class="form-group">
-                    <label for="claimNumber">Claim Number:</label>
-                    <input type="text" id="Claim_Number" placeholder="CLM-99821">
-                    <div class="hint">Ensure this API Name matches your Messaging Parameter map.</div>
+                    <label for="claimNumber">Claim_Number:</label>
+                    <input type="text" id="claimNumber" placeholder="CLM-99821">
                 </div>
             </div>
         </div>
@@ -169,14 +162,16 @@
     </form>
 
     <div id="statusBox" class="status-box">
-        <h3>Deployment Initialized with Hidden Parameters!</h3>
-        <p>The snippet has been run. Launch the chat window using the widget in the bottom right corner to submit the hidden variables into your routing flow.</p>
-        <p><strong>Generated Snippet Reference:</strong></p>
+        <h3>Deployment Scripts Appended!</h3>
+        <p>The bootstrap loader is active. Once validated by the Salesforce network layer, your parameter mappings will register and the chat widget will render on screen.</p>
+        <p><strong>Generated Async Event Code Snippet:</strong></p>
         <pre><code id="snippetPreview">Code will appear here...</code></pre>
     </div>
 </div>
 
 <script type='text/javascript'>
+    let handleMessagingReadyRef = null;
+
     function initializeEnhancedChat() {
         // Core Config
         const orgId = document.getElementById('orgId').value.trim();
@@ -188,7 +183,7 @@
         const firstName = document.getElementById('First_Name').value.trim();
         const lastName = document.getElementById('Last_Name').value.trim();
         const email = document.getElementById('Email_Address').value.trim();
-        const companyName = document.getElementById('Business_Name').value.trim();
+        const businessName = document.getElementById('Business_Name').value.trim();
         const taxId = document.getElementById('Tax_ID').value.trim();
         const claimNumber = document.getElementById('Claim_Number').value.trim();
 
@@ -197,37 +192,36 @@
             return;
         }
 
-        // Build the dynamic display snippet text
+        // Build the display preview code snippet
         const dynamicSnippet = 
-`function initEmbeddedMessaging() {
+`window.addEventListener("onEmbeddedMessagingReady", () => {
+    console.log("Salesforce SDK Ready. Injecting hidden parameters...");
     try {
-        // Set hidden pre-chat variables before initializing
         embeddedomnichannelmessaging.setPrechatPageFields({
-            "FirstName": "${First_Name}",
-            "LastName": "${Last_Name}",
-            "Email": "${Email_Address}",
-            "CompanyName": "${Business_Name}",
+            "First_Name": "${First_Name}",
+            "Last_Name": "${Last_Name}",
+            "Email_Address": "${Email_Address}",
+            "Business_Name": "${Business_Name}",
             "Tax_ID": "${Tax_ID}",
             "Claim_Number": "${Claim_Number}"
         });
-
-        embeddedomnichannelmessaging.init(
-            '${orgId}',
-            '${esdName}',
-            '${scUrl}',
-            {
-                scrt2URL: '${scApiUrl}'
-            }
-        );
     } catch (err) {
-        console.error('Error loading Embedded Messaging: ', err);
+        console.error("Error setting pre-chat page fields:", err);
     }
+});
+
+window._sfdc = window._sfdc || {};
+window._sfdc.embeddedMessagingConfiguration = {
+    orgId: "${orgId}",
+    deploymentName: "${esdName}",
+    siteUrl: "${scUrl}",
+    scrt2Url: "${scApiUrl}"
 };`;
         
         document.getElementById('snippetPreview').textContent = dynamicSnippet;
         document.getElementById('statusBox').style.display = 'block';
 
-        // Set global configurations
+        // Set global configuration variables
         window._sfdc = window._sfdc || {};
         window._sfdc.embeddedMessagingConfiguration = {
             orgId: orgId,
@@ -236,33 +230,39 @@
             scrt2Url: scApiUrl
         };
 
+        // Clean up any stale event listener from previous configurations
+        if (handleMessagingReadyRef) {
+            window.removeEventListener("onEmbeddedMessagingReady", handleMessagingReadyRef);
+        }
+
+        // Define our exact listener
+        handleMessagingReadyRef = function() {
+            console.log('Salesforce initialization event confirmed.');
+            try {
+                embeddedomnichannelmessaging.setPrechatPageFields({
+                    "First_Name": First_Name,
+                    "Last_Name": Last_Name,
+                    "Email_Address": Email_Address,
+                    "Business_Name": Business_Name,
+                    "Tax_ID": Tax_ID,
+                    "Claim_Number": Claim_Number
+                });
+                console.log('Successfully injected exact parameters into context.');
+            } catch (e) {
+                console.error("Error running setPrechatPageFields:", e);
+            }
+        };
+
+        // Bind listener
+        window.addEventListener("onEmbeddedMessagingReady", handleMessagingReadyRef);
+
         // Inject the bootstrap script
         const script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = `${scUrl}/assets/js/bootstrap.min.js`;
         
-        script.onload = function() {
-            try {
-                // Apply the pre-chat field parameters 
-                embeddedomnichannelmessaging.setPrechatPageFields({
-                    "FirstName": First_Name,
-                    "LastName": Last_Name,
-                    "Email": Email_Address,
-                    "CompanyName": Business_Name,
-                    "Tax_ID": Tax_ID,
-                    "Claim_Number": Claim_Number
-                });
-                
-                // Fire initialization
-                embeddedomnichannelmessaging.init(orgId, esdName, scUrl, { scrt2URL: scApiUrl });
-                console.log('Salesforce Chat successfully initialized with pre-chat mappings.');
-            } catch (e) {
-                console.error("Initialization exception:", e);
-            }
-        };
-
         script.onerror = function() {
-            alert('Failed to load Salesforce bootstrap assets. Check your URLs, CORS whitelist, or CSP settings.');
+            alert('Failed to connect to the Salesforce script assets. Ensure your Site URL is correct and CORS is allowed.');
         };
 
         document.body.appendChild(script);
