@@ -133,33 +133,33 @@
                 
                 <div class="form-group">
                     <label for="firstName">First Name:</label>
-                    <input type="text" id="firstName" placeholder="John">
+                    <input type="text" id="First_Name" placeholder="John">
                 </div>
 
                 <div class="form-group">
                     <label for="lastName">Last Name:</label>
-                    <input type="text" id="lastName" placeholder="Doe">
+                    <input type="text" id="Last_Name" placeholder="Doe">
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" id="email" placeholder="john.doe@example.com">
+                    <input type="email" id="Email_Address" placeholder="john.doe@example.com">
                 </div>
 
                 <div class="form-group">
-                    <label for="companyName">Company Name:</label>
-                    <input type="text" id="companyName" placeholder="Acme Corp">
+                    <label for="companyName">Business Name:</label>
+                    <input type="text" id="Business_Name" placeholder="Acme Corp">
                 </div>
 
                 <div class="form-group">
                     <label for="taxId">Tax ID:</label>
-                    <input type="text" id="taxId" placeholder="12-3456789">
+                    <input type="text" id="Tax_ID" placeholder="12-3456789">
                     <div class="hint">Ensure this API Name matches your Messaging Parameter map.</div>
                 </div>
 
                 <div class="form-group">
                     <label for="claimNumber">Claim Number:</label>
-                    <input type="text" id="claimNumber" placeholder="CLM-99821">
+                    <input type="text" id="Claim_Number" placeholder="CLM-99821">
                     <div class="hint">Ensure this API Name matches your Messaging Parameter map.</div>
                 </div>
             </div>
@@ -185,12 +185,12 @@
         const scApiUrl = document.getElementById('scApiUrl').value.trim();
 
         // Pre-chat Variables
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const companyName = document.getElementById('companyName').value.trim();
-        const taxId = document.getElementById('taxId').value.trim();
-        const claimNumber = document.getElementById('claimNumber').value.trim();
+        const firstName = document.getElementById('First_Name').value.trim();
+        const lastName = document.getElementById('Last_Name').value.trim();
+        const email = document.getElementById('Email_Address').value.trim();
+        const companyName = document.getElementById('Business_Name').value.trim();
+        const taxId = document.getElementById('Tax_ID').value.trim();
+        const claimNumber = document.getElementById('Claim_Number').value.trim();
 
         if(!orgId || !esdName || !scUrl || !scApiUrl) {
             alert('Please fill out all deployment configuration fields.');
@@ -203,12 +203,12 @@
     try {
         // Set hidden pre-chat variables before initializing
         embeddedomnichannelmessaging.setPrechatPageFields({
-            "FirstName": "${firstName}",
-            "LastName": "${lastName}",
-            "Email": "${email}",
-            "CompanyName": "${companyName}",
-            "Tax_ID": "${taxId}",
-            "Claim_Number": "${claimNumber}"
+            "FirstName": "${First_Name}",
+            "LastName": "${Last_Name}",
+            "Email": "${Email_Address}",
+            "CompanyName": "${Business_Name}",
+            "Tax_ID": "${Tax_ID}",
+            "Claim_Number": "${Claim_Number}"
         });
 
         embeddedomnichannelmessaging.init(
@@ -245,12 +245,12 @@
             try {
                 // Apply the pre-chat field parameters 
                 embeddedomnichannelmessaging.setPrechatPageFields({
-                    "FirstName": firstName,
-                    "LastName": lastName,
-                    "Email": email,
-                    "CompanyName": companyName,
-                    "Tax_ID": taxId,
-                    "Claim_Number": claimNumber
+                    "FirstName": First_Name,
+                    "LastName": Last_Name,
+                    "Email": Email_Address,
+                    "CompanyName": Business_Name,
+                    "Tax_ID": Tax_ID,
+                    "Claim_Number": Claim_Number
                 });
                 
                 // Fire initialization
