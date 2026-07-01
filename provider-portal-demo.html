@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Enhanced Chat Tester</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f6f9;
+        }
+        h1, h3 {
+            color: #1b5e20;
+            margin-top: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .section-box {
+            background: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #0070d2;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #005fb2;
+        }
+        .status-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-left: 5px solid #2e7d32;
+            border-radius: 4px;
+            display: none;
+        }
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Salesforce Enhanced Chat Deployment Tester</h1>
+    <p>Enter test data into the fields below. Clicking the button will apply these variables into your Salesforce pre-chat messaging context and initialize the <strong>CCC_Provider_Portal</strong> deployment widget.</p>
+    
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+    <form id="prechatForm">
+        <div class="section-box">
+            <h3>Hidden Pre-Chat Variables</h3>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="firstName">First_Name:</label>
+                    <input type="text" id="firstName" placeholder="John">
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last_Name:</label>
+                    <input type="text" id="lastName" placeholder="Doe">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email_Address:</label>
+                    <input type="email" id="email" placeholder="john.doe@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="businessName">Business_Name:</label>
+                    <input type="text" id="businessName" placeholder="Acme Corp">
+                </div>
+
+                <div class="form-group">
+                    <label for="taxId">Tax_ID:</label>
+                    <input type="text" id="taxId" placeholder="12-3456789">
+                </div>
+
+                <div class="form-group">
+                    <label for="claimNumber">Claim_Number:</label>
+                    <input type="text" id="claimNumber" placeholder="CLM-99821">
+                </div>
+            </div>
+        </div>
+
+        <button type="button" onclick="launchChatWithParameters()">Apply Parameters & Launch Chat</button>
+    </form>
+
+    <div id="statusBox" class="status-box">
+        <h3>Deployment Initialized!</h3>
+        <p>The Salesforce snippet has loaded. Open the chat widget in the bottom-right corner to initiate your Omni-Channel messaging session routing.</p>
+        <p><strong>Executed Pre-chat Script Logic Reference:</strong></p>
+        <pre><code id="snippetPreview">Code snippet execution reference...</code></pre>
+    </div>
+</div>
+
+<script type='text/javascript'>
+    let chatInitialized = false;
+
+    function launchChatWithParameters() {
+        // Retrieve values dynamically from form inputs
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const businessName = document.getElementById('businessName').value.trim();
+        const taxId = document.getElementById('taxId').value.trim();
+        const claimNumber = document.getElementById('claimNumber').value.trim();
+
+        // Display current execution state back to the UI
+        document.getElementById('snippetPreview').textContent = 
+`window.addEventListener("onEmbeddedMessagingReady", () => {
+    embeddedservice_bootstrap.prechatAPI.setPrechatPageFields({
+        "First_Name": "${firstName}",
+        "Last_Name": "${lastName}",
+        "Email_Address": "${email}",
+        "Business_Name": "${businessName}",
+        "Tax_ID": "${taxId}",
+        "Claim_Number": "${claimNumber}"
+    });
+});`;
+        
+        document.getElementById('statusBox').style.display = 'block';
+
+        // Add the platform event listener to pass fields safely when ready
+        window.addEventListener("onEmbeddedMessagingReady", () => {
+            console.log("Salesforce Messaging SDK is ready. Injecting pre-chat fields...");
+            try {
+                embeddedservice_bootstrap.prechatAPI.setPrechatPageFields({
+                    "First_Name": firstName,
+                    "Last_Name": lastName,
+                    "Email_Address": email,
+                    "Business_Name": businessName,
+                    "Tax_ID": taxId,
+                    "Claim_Number": claimNumber
+                });
+                console.log("Pre-chat variables successfully passed.");
+            } catch (err) {
+                console.error("Error setting pre-chat page fields:", err);
+            }
+        });
+
+        // Guard logic to prevent loading duplicate bootstrap script nodes on multiple button clicks
+        if (chatInitialized) {
+            console.log("Chat setup redefined. Launching widget with new context parameters.");
+            return;
+        }
+
+        // --- Your Verified Salesforce Snippet Block ---
+        window.initEmbeddedMessaging = function() {
+            try {
+                embeddedservice_bootstrap.settings.language = 'en_US'; 
+
+                embeddedservice_bootstrap.init(
+                    '00DWG000005pIMb',
+                    'CCC_Provider_Portal',
+                    'https://cccis--quantumdev.sandbox.my.site.com/ESWProviderPortal1782485651283',
+                    {
+                        scrt2URL: 'https://cccis--quantumdev.sandbox.my.salesforce-scrt.com'
+                    }
+                );
+            } catch (err) {
+                console.error('Error loading Embedded Messaging: ', err);
+            }
+        };
+
+        // Dynamically inject script tracking tag to execute handshake
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://cccis--quantumdev.sandbox.my.site.com/ESWProviderPortal1782485651283/assets/js/bootstrap.min.js';
+        script.onload = function() {
+            initEmbeddedMessaging();
+        };
+
+        document.body.appendChild(script);
+        chatInitialized = true;
+    }
+</script>
+
+</body>
+</html>
