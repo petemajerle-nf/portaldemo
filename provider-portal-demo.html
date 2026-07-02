@@ -159,7 +159,7 @@
         // Display current execution state back to the UI
         document.getElementById('snippetPreview').textContent = 
 `window.addEventListener("onEmbeddedMessagingReady", () => {
-    embeddedservice_bootstrap.prechatAPI.setPrechatPageFields({
+    embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
         "First_Name": "${firstName}",
         "Last_Name": "${lastName}",
         "Email_Address": "${email}",
@@ -175,7 +175,7 @@
         window.addEventListener("onEmbeddedMessagingReady", () => {
             console.log("Salesforce Messaging SDK is ready. Injecting pre-chat fields...");
             try {
-                embeddedservice_bootstrap.prechatAPI.setPrechatPageFields({
+                embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
                     "First_Name": firstName,
                     "Last_Name": lastName,
                     "Email_Address": email,
