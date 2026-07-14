@@ -136,6 +136,11 @@
                     <input type="text" id="docID" placeholder="1234567890">
                 </div>
 
+                <div class="form-group">
+                    <label for="insuranceCarrier">Insurance_Carrier:</label>
+                    <input type="text" id="insuranceCarrier" placeholder="USAA">
+                </div>
+
             </div>
         </div>
 
@@ -162,6 +167,7 @@
         const taxId = document.getElementById('taxId').value.trim();
         const claimNumber = document.getElementById('claimNumber').value.trim();
         const docID = document.getElementById('docID').value.trim();
+        const insuranceCarrier = document.getElementById('insuranceCarrier').value.trim();
 
         // Display current execution state back to the UI
         document.getElementById('snippetPreview').textContent = 
@@ -173,7 +179,8 @@
         "Business_Name": "${businessName}",
         "Tax_ID": "${taxId}",
         "Claim_Number": "${claimNumber}",
-        "Doc_ID": "${docID}"
+        "Doc_ID": "${docID}",
+        "Insurance_Carrier": "${insuranceCarrier}"
 
     });
 });`;
@@ -191,7 +198,8 @@
                     "Business_Name": businessName,
                     "Tax_ID": taxId,
                     "Claim_Number": claimNumber,
-                    "Doc_ID": docID
+                    "Doc_ID": docID,
+                    "Insurance_Carrier": insuranceCarrier
                 });
                 console.log("Pre-chat variables successfully passed.");
             } catch (err) {
