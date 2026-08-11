@@ -127,6 +127,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="taxId">Zip_Code:</label>
+                    <input type="text" id="zipCode" placeholder="11111-2222">
+                </div>
+
+                <div class="form-group">
                     <label for="claimNumber">Claim_Number:</label>
                     <input type="text" id="claimNumber" placeholder="CLM-99821">
                 </div>
@@ -173,6 +178,7 @@
         const email = document.getElementById('email').value.trim();
         const businessName = document.getElementById('businessName').value.trim();
         const taxId = document.getElementById('taxId').value.trim();
+        const zipCode = document.getElementById('zipCode').value.trim();
         const claimNumber = document.getElementById('claimNumber').value.trim();
         const docID = document.getElementById('docID').value.trim();
         const insuranceCarrier = document.getElementById('insuranceCarrier').value.trim();
@@ -186,6 +192,7 @@
         "Email_Address": "${email}",
         "Business_Name": "${businessName}",
         "Tax_ID": "${taxId}",
+        "Zip_Code": "${zipCode}",
         "Claim_Number": "${claimNumber}",
         "Doc_ID": "${docID}",
         "Insurance_Carrier": "${insuranceCarrier}"
@@ -205,6 +212,7 @@
                     "Email_Address": email,
                     "Business_Name": businessName,
                     "Tax_ID": taxId,
+                    "Zip_Code": zipCode,
                     "Claim_Number": claimNumber,
                     "Doc_ID": docID,
                     "Insurance_Carrier": insuranceCarrier
