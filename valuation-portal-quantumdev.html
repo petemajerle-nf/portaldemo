@@ -117,41 +117,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="businessName">Business_Name:</label>
-                    <input type="text" id="businessName" placeholder="Acme Corp">
+                    <label for="businessName">Company_Name:</label>
+                    <input type="text" id="companyName" placeholder="Acme Corp">
                 </div>
 
                 <div class="form-group">
-                    <label for="taxId">Tax_ID:</label>
-                    <input type="text" id="taxId" placeholder="12-3456789">
+                    <label for="taxId">Adjuster_ID:</label>
+                    <input type="text" id="adjusterId" placeholder="C4852">
                 </div>
 
                 <div class="form-group">
-                    <label for="taxId">Zip_Code:</label>
-                    <input type="text" id="zipCode" placeholder="11111-2222">
-                </div>
-
-                <div class="form-group">
-                    <label for="claimNumber">Claim_Number:</label>
-                    <input type="text" id="claimNumber" placeholder="CLM-99821">
-                </div>
-
-                <div class="form-group">
-                    <label for="docID">Doc_ID:</label>
-                    <input type="text" id="docID" placeholder="1234567890">
-                </div>
-
-                <div class="form-group">
-                    <label for="insuranceCarrier">Insurance_Carrier:</label>
-                    <select id="insuranceCarrier" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; background-color: #fff;">
-                        <option value="">-- Select an Insurance Carrier --</option>
-                        <option value="USAA">USAA</option>
-                        <option value="CSAA">CSAA</option>
-                        <option value="State Auto">State Auto</option>
-                        <option value="Horace Mann">Horace Mann</option>
-                        <option value="Geico">Geico</option>
-                        <option value="Other Insurance Carrier">Other Insurance Carrier</option>
-                    </select>
+                    <label for="docID">Request_Number:</label>
+                    <input type="text" id="requestNumber" placeholder="1234567890">
                 </div>
 
             </div>
@@ -176,12 +153,9 @@
         const firstName = document.getElementById('firstName').value.trim();
         const lastName = document.getElementById('lastName').value.trim();
         const email = document.getElementById('email').value.trim();
-        const businessName = document.getElementById('businessName').value.trim();
-        const taxId = document.getElementById('taxId').value.trim();
-        const zipCode = document.getElementById('zipCode').value.trim();
-        const claimNumber = document.getElementById('claimNumber').value.trim();
-        const docID = document.getElementById('docID').value.trim();
-        const insuranceCarrier = document.getElementById('insuranceCarrier').value.trim();
+        const companyName = document.getElementById('companyName').value.trim();
+        const adjusterId = document.getElementById('adjusterId').value.trim();
+        const requestNumber = document.getElementById('requestNumber').value.trim();
 
         // Display current execution state back to the UI
         document.getElementById('snippetPreview').textContent = 
@@ -190,12 +164,9 @@
         "First_Name": "${firstName}",
         "Last_Name": "${lastName}",
         "Email_Address": "${email}",
-        "Business_Name": "${businessName}",
-        "Tax_ID": "${taxId}",
-        "Zip_Code": "${zipCode}",
-        "Claim_Number": "${claimNumber}",
-        "Doc_ID": "${docID}",
-        "Insurance_Carrier": "${insuranceCarrier}"
+        "Company_Name": "${companyName}",
+        "Adjuster_ID": "${adjusterId}",
+        "Request_Number": "${requestNumber}",
 
     });
 });`;
@@ -210,12 +181,9 @@
                     "First_Name": firstName,
                     "Last_Name": lastName,
                     "Email_Address": email,
-                    "Business_Name": businessName,
-                    "Tax_ID": taxId,
-                    "Zip_Code": zipCode,
-                    "Claim_Number": claimNumber,
-                    "Doc_ID": docID,
-                    "Insurance_Carrier": insuranceCarrier
+                    "Company_Name": companyName,
+                    "Adjuster_ID": adjusterId,
+                    "request_Number": requestNumber,
                 });
                 console.log("Pre-chat variables successfully passed.");
             } catch (err) {
