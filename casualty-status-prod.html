@@ -235,11 +235,11 @@
                 embeddedservice_bootstrap.settings.language = 'en_US'; 
 
                 embeddedservice_bootstrap.init(
-                    '00DWF00000BnlfN',
+                    '00DU0000000J3G2',
                     'Casualty_Status',
-                    'https://cccis--staging.sandbox.my.site.com/ESWCasualtyStatu1789395325709',
+                    'https://cccis.my.site.com/ESWCasualtyStatu1792729028345',
                     {
-                        scrt2URL: 'https://cccis--staging.sandbox.my.salesforce-scrt.com'
+                        scrt2URL: 'https://cccis.my.salesforce-scrt.com'
                     }
                 );
             } catch (err) {
@@ -250,7 +250,7 @@
         // Dynamically inject script tracking tag to execute handshake
         const script = document.createElement('script');
         script.type = 'text/javascript';
-        script.src = 'https://cccis--staging.sandbox.my.site.com/ESWCasualtyStatu1789395325709/assets/js/bootstrap.min.js';
+        script.src = 'https://cccis.my.site.com/ESWCasualtyStatu1792729028345/assets/js/bootstrap.min.js';
         script.onload = function() {
             initEmbeddedMessaging();
         };
